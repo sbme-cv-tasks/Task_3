@@ -113,6 +113,7 @@ class Ui_MainWindow(object):
         QMetaObject.connectSlotsByName(MainWindow)
 
     def _wire_signals(self, MainWindow):
+        self.actionOpen_Image.triggered.connect(self._upload_original_image)
         self.btnUploadOriginal.clicked.connect(self.actionOpen_Image.trigger)
         self.btnReset.clicked.connect(self._reset_view_labels)
         self.comboMode.currentIndexChanged.connect(self._sync_mode_widgets)
@@ -127,6 +128,27 @@ class Ui_MainWindow(object):
             self.btnUploadMatchImage1.setIcon(open_icon)
         if self.btnUploadMatchImage2 is not None:
             self.btnUploadMatchImage2.setIcon(open_icon)
+
+    def _upload_original_image(self):
+        file_path, _ = QFileDialog.getOpenFileName(
+            self.centralwidget,
+            "Open Image",
+            "",
+            "Image Files (*.png *.jpg *.jpeg *.bmp)",
+        )
+        if not file_path:
+            return
+
+        pixmap = QPixmap(file_path)
+        if pixmap.isNull():
+            self.statusbar.showMessage("Unable to load selected image.", 2000)
+            return
+
+        self.lblOriginal.setPixmap(
+            pixmap.scaled(self.lblOriginal.size(), Qt.KeepAspectRatio, Qt.SmoothTransformation)
+        )
+        self.lblOriginal.setText("")
+        self.statusbar.showMessage(f"Loaded: {file_path}", 2000)
 
     def _upload_match_image(self, target_label):
         file_path, _ = QFileDialog.getOpenFileName(
