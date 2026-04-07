@@ -3,6 +3,7 @@ from PySide6.QtWidgets import QFileDialog
 from PySide6.QtCore import Qt
 from utils.converters import cv_to_pixmap
 from controllers.corner_detection_controller import CornerDetectionController
+from controllers.matching_controller import MatchingController
 from controllers.sift_controller import SIFTController
 
 
@@ -12,8 +13,9 @@ class MainController:
         self.model = model
         self.window = window
 
-        self.CornerDetectionController = CornerDetectionController(self.ui, self.model,display_callback=self.display_processed_image)
+        self.CornerDetectionController = CornerDetectionController(self.ui, self.model, display_callback=self.display_processed_image)
         self.SIFTController = SIFTController(self.ui, self.model, display_callback=self.display_processed_image)
+        self.MatchingController = MatchingController(self.ui, self.model)
 
         self._connect_signals()
 

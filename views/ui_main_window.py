@@ -161,6 +161,7 @@ class Ui_MainWindow(object):
         target_label.setPixmap(
             pixmap.scaled(target_label.size(), Qt.KeepAspectRatio, Qt.SmoothTransformation)
         )
+        target_label.setProperty("imagePath", file_path)
         target_label.setText("")
         self.statusbar.showMessage(f"Loaded: {file_path}", 2000)
 
@@ -178,7 +179,7 @@ class Ui_MainWindow(object):
         self.parametersStack.setCurrentIndex(index)
         self.displayStack.setCurrentIndex(1 if index == 2 else 0)
         if self.matchTimeFrame is not None:
-            self.matchTimeFrame.hide()
+            self.matchTimeFrame.setVisible(index == 2)
         if index == 2:
             self.hDivider.hide()
             self.parametersStack.hide()
