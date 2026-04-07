@@ -90,7 +90,6 @@ class Ui_MainWindow(object):
         self.harrisThreshold = self.centralwidget.findChild(type(self.centralwidget), "harrisThreshold")
         self.harrisWindow = self.centralwidget.findChild(type(self.centralwidget), "harrisWindow")
         self.lam_min_check = self.centralwidget.findChild(type(self.centralwidget), "lam_min_check")
-        self.siftSigma = self.centralwidget.findChild(type(self.centralwidget), "siftSigma")
         self.siftOctaves = self.centralwidget.findChild(type(self.centralwidget), "siftOctaves")
         self.matchThreshold = self.centralwidget.findChild(type(self.centralwidget), "matchThreshold")
         self.matchCount = self.centralwidget.findChild(type(self.centralwidget), "matchCount")
