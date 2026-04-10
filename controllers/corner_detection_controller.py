@@ -30,7 +30,7 @@ class CornerDetectionController:
         # scaled_threshold = harris_threshold * 10000
         # print(scaled_threshold)
         # Apply Corner Detection
-        _,corners = corner_detector(self.model.original_image,
+        _,corners,elapsed_time = corner_detector(self.model.original_image,
                                     # harris_sigma,
                                     window_size = harris_window,
                                     threshold = harris_threshold,
@@ -40,5 +40,7 @@ class CornerDetectionController:
 
         self.model.processed_image = corners
         self.display_callback(self.model.processed_image)
+        self.ui.lblTimeValueSingle.setText(f"{elapsed_time:.3f} S")
+        self.ui.statusbar.showMessage(f"Applied Corner Detection", 3000)
 
 

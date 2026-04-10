@@ -1,8 +1,11 @@
+import time
+
 import cv2
 import numpy as np
 
 
 def corner_detector(input_img, k = 0.04, window_size = 5, threshold = 0.01,lambda_minus_flag = False):
+    start_total = time.time()
     corner_list = []
 
     if len(input_img.shape) == 3:
@@ -77,4 +80,6 @@ def corner_detector(input_img, k = 0.04, window_size = 5, threshold = 0.01,lambd
                 if r == neighborhood.max():
                     corner_list.append([x, y, r])
                     cv2.circle(output_img, (x, y), radius=3, color=(0, 0, 255), thickness=-1)
-    return corner_list, output_img
+
+    total_time = time.time() - start_total
+    return corner_list, output_img,total_time
