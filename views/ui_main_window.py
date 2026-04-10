@@ -91,6 +91,7 @@ class Ui_MainWindow(object):
         self.harrisWindow = self.centralwidget.findChild(type(self.centralwidget), "harrisWindow")
         self.lam_min_check = self.centralwidget.findChild(type(self.centralwidget), "lam_min_check")
         self.siftOctaves = self.centralwidget.findChild(type(self.centralwidget), "siftOctaves")
+        self.siftShowOrientation = self.centralwidget.findChild(type(self.centralwidget), "siftShowOrientation")
         self.matchThreshold = self.centralwidget.findChild(type(self.centralwidget), "matchThreshold")
         self.matchCount = self.centralwidget.findChild(type(self.centralwidget), "matchCount")
         self.radioNCC = self.centralwidget.findChild(type(self.centralwidget), "radioNCC")
@@ -102,6 +103,8 @@ class Ui_MainWindow(object):
 
         self._set_match_upload_icons(MainWindow)
         self._wire_signals(MainWindow)
+        if self.matchTimeFrame is not None:
+            self.matchTimeFrame.hide()
         self._sync_mode_widgets(0)
         QMetaObject.connectSlotsByName(MainWindow)
 
@@ -121,6 +124,10 @@ class Ui_MainWindow(object):
             self.btnUploadMatchImage1.setIcon(open_icon)
         if self.btnUploadMatchImage2 is not None:
             self.btnUploadMatchImage2.setIcon(open_icon)
+
+    def _clear_label(self, label, text):
+        label.clear()
+        label.setText(text)
 
     def _upload_original_image(self):
         file_path, _ = QFileDialog.getOpenFileName(
@@ -166,20 +173,24 @@ class Ui_MainWindow(object):
         self.statusbar.showMessage(f"Loaded: {file_path}", 2000)
 
     def _reset_view_labels(self):
-        self.lblOriginal.setText("No Image")
-        self.lblProcessed.setText("No Image")
-        self.lblMatchImage1.setText("No Image")
-        self.lblMatchImage2.setText("No Image")
-        self.lblMatchResult.setText("Matching Result")
+        self._clear_label(self.lblOriginal, "No Image")
+        self._clear_label(self.lblProcessed, "No Image")
+        self._clear_label(self.lblMatchImage1, "No Image")
+        self._clear_label(self.lblMatchImage2, "No Image")
+        self._clear_label(self.lblMatchResult, "Matching Result")
         self.lblTimeValueSingle.setText("0.000 S")
-        self.lblTimeValueMatch.setText("0.000 S")
         self.statusbar.showMessage("View reset.", 2000)
 
     def _sync_mode_widgets(self, index):
+        previous_index = getattr(self, "_current_mode_index", None)
+        self._current_mode_index = index
         self.parametersStack.setCurrentIndex(index)
         self.displayStack.setCurrentIndex(1 if index == 2 else 0)
-        if self.matchTimeFrame is not None:
-            self.matchTimeFrame.setVisible(index == 2)
+        if previous_index != index:
+            self._clear_label(self.lblProcessed, "No Image")
+            self._clear_label(self.lblMatchResult, "Matching Result")
+            self.lblTimeValueSingle.setText("0.000 S")
+
         if index == 2:
             self.hDivider.hide()
             self.parametersStack.hide()
